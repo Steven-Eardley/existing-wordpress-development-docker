@@ -8,7 +8,7 @@
 # Updates URL in database so the site can run on localhost
 #
 
-export dev_url=http://localhost
+export dev_url=http://localhost:8000
 
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -D$MYSQL_DATABASE -e "
 UPDATE ${WORDPRESS_TABLE_PREFIX}options SET option_value = REPLACE(option_value, '${PRODUCTION_URL}', '${dev_url}') WHERE option_name = 'home' OR option_name = 'siteurl'; 
