@@ -1,5 +1,7 @@
 # Existing WordPress site development - Docker
 
+Expanded from [https://github.com/lumonald/existing-wordpress-development-docker](https://github.com/lumonald/existing-wordpress-development-docker). Minor changes to ports, and addition of phpMyAdmin.
+
 Quickly creates a local development environment for an *existing* WordPress site. 
 
 This application requires Docker to be up and running and for docker compose to also be installed.
@@ -8,6 +10,11 @@ The `docker-compose.yml` file defines 2 containers -
 
 * `wordpress` - for the website files.
 * `db` - for the associated MySQL database.
+
+In addition, `docker-compose-phpmyadmin.yml` starts a phpMyAdmin interface to interact with the database.
+To run this alongside the site, use e.g:
+
+	docker-compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml up 
 
 The `wordpress` container has 2 volumes - 
 
@@ -32,10 +39,14 @@ The `db` container has 3 volumes -
 
 3. Obtain copy of `wp-content` folder from pre-existing site and place in location: `site/wp-content`
 
-4. Enter your configuration variables into `.env`. 
+4. Copy `env-template` as `.env` and enter your configuration variables. 
 
 5. Navigate to the root of this project locally and run:
 
-    `docker-compose up -d && docker-compose exec wordpress prep.sh`
+	docker-compose up -d && docker-compose exec wordpress prep.sh
 
-The website will then be available at `http://localhost` and the WordPress dashboard at `http://localhost/wp-admin`.
+6. For additional insight into the database, optionally run _phpMyAdmin_ with:
+
+	docker-compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml up
+
+The website will then be available at `http://localhost:8000` and the WordPress dashboard at `http://localhost:8000/wp-admin`. __phpMyAdmin__ is set to `http://localhost:8001`
