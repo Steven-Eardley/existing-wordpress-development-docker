@@ -6,8 +6,10 @@ services:
     restart: always
     ports:
       - 8001:80
-    links:
+    depends_on:
       - db
+    networks:
+      wp:
     environment:
       PMA_HOST: db
       PMA_USER: $db_user

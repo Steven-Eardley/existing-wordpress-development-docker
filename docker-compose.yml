@@ -2,9 +2,14 @@
 
 version: '3.3'
 
+networks:
+   wp:
+
 services:
    db:
      image: mysql:5.7
+     networks:
+       wp:
      volumes:
        - ./database:/var/lib/mysql
        - ./mysqldumps/backup.sql.gz:/docker-entrypoint-initdb.d/backup.sql.gz
@@ -21,14 +26,14 @@ services:
    wordpress:
      depends_on:
        - db
+     networks:
+       wp:
      image: wordpress:latest
      volumes:
        - ./site/wp-content:/var/www/html/wp-content
        - ./init/prep.sh:/usr/local/bin/prep.sh
      ports:
        - '8000:80'
-     links:
-       - db
      restart: always
      environment:
        WORDPRESS_DB_HOST: $db_host
