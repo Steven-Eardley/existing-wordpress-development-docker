@@ -1,10 +1,10 @@
 # Existing WordPress site development - Docker
 
-Expanded from [https://github.com/lumonald/existing-wordpress-development-docker](https://github.com/lumonald/existing-wordpress-development-docker). Minor changes to ports, and addition of phpMyAdmin.
+Expanded from [https://github.com/lumonald/existing-wordpress-development-docker](https://github.com/lumonald/existing-wordpress-development-docker). Minor changes to ports, specify new URL, and addition of phpMyAdmin.
 
-Quickly creates a local development environment for an *existing* WordPress site. 
+Brings up an *existing* WordPress site from `wp-content` and a MySQL backup. Allows changing the configured URL, which speeds up developing on a local machine or easily switching domains. By default it will start on http://localhost:8000 for local preview.
 
-This application requires Docker to be up and running and for docker compose to also be installed.
+Requires Docker and docker-compose. Since the wordpress image includes an Apache webserver it would be possible to pare this down further e.g. by exposing the container on default web port 80, but to avoid conflicts and allow deployment with an nginx proxy the default port is 8000. 
 
 The `docker-compose.yml` file defines 2 containers - 
 
@@ -43,10 +43,25 @@ The `db` container has 3 volumes -
 
 5. Navigate to the root of this project locally and run:
 
-	docker-compose up -d && docker-compose exec wordpress prep.sh
+    `docker-compose up -d && docker-compose exec wordpress prep.sh`
 
 6. For additional insight into the database, optionally run _phpMyAdmin_ with:
 
-	docker-compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml up
+    `docker-compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml up`
 
-The website will then be available at `http://localhost:8000` and the WordPress dashboard at `http://localhost:8000/wp-admin`. __phpMyAdmin__ is set to `http://localhost:8001`
+By default, the website will then be available at `http://localhost:8000` and the WordPress dashboard at `http://localhost:8000/wp-admin`. __phpMyAdmin__ is set to `http://localhost:8001`. If you specified a different `new_url` in the `.env` file then wordpress will attempt to redirect there, so you may require some DNS and webserver configuration to bring the site up. Below is a minimal example for running an nginx reverse proxy in front of wordpress:
+
+```
+server {
+    server_name example.com;
+
+    location / {
+        proxy_pass        http://localhost:8000/;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header  Host $host;
+    }
+}
+
+```

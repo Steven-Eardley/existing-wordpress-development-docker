@@ -1,3 +1,6 @@
 mysqldumps/
 database/
 .env
+
+site/
+!site/wp-content/.gitkeep
