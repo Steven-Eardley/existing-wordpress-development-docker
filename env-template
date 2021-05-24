@@ -1,6 +1,11 @@
-# (Required) URL of site you are bringing down to develop
+# (Required) URL of site existing in the database
 # E.g https://www.yourdomain.co.uk
-production_url=
+old_url=
+
+# (Optional) URL to change the site to (leave blank to remain unchanged)
+# E.g. http://localhost:8000
+# Make sure the port (if present) corresponds to that in docker-compose.yml
+new_url=
 
 # (Required) The table prefix of the WordPress database used in production site
 # E.g wp_

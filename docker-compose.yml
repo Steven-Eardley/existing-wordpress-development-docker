@@ -21,7 +21,8 @@ services:
        MYSQL_USER: $db_user
        MYSQL_PASSWORD: $db_password
        WORDPRESS_TABLE_PREFIX: $db_table_prefix
-       PRODUCTION_URL: $production_url
+       OLD_URL: $old_url
+       NEW_URL: $new_url
 
    wordpress:
      depends_on:
