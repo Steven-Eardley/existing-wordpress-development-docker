@@ -65,3 +65,27 @@ server {
 }
 
 ```
+
+## Accessing phpMyAdmin on the server
+
+On the server, phpMyAdmin is bound to localhost only (`127.0.0.1:8001` in `docker-compose-phpmyadmin.yml`), so it can't be reached from outside the host. Note that it logs in automatically using `PMA_USER`/`PMA_PASSWORD`, so anyone who can reach the port has database access — keep it on localhost.
+
+To use it from your own machine, open an SSH tunnel:
+
+1. Make sure phpMyAdmin is running on the server (from the project directory):
+
+    `docker compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml up -d`
+
+2. On your local machine, start the tunnel (replace `cl-docker` with your SSH host alias or `user@host`):
+
+    `ssh -N -L 8001:127.0.0.1:8001 cl-docker`
+
+   `-N` keeps the session open without a remote shell. If port 8001 is already in use locally, pick another local port, e.g. `-L 9001:127.0.0.1:8001`.
+
+3. Browse to `http://localhost:8001` (or the local port you chose).
+
+4. Close the tunnel with `Ctrl+C` when finished. Optionally stop phpMyAdmin when not in use:
+
+    `docker compose -f docker-compose.yml -f docker-compose-phpmyadmin.yml stop phpmyadmin`
+
+**Note:** Always include both compose files when running commands that affect phpMyAdmin. Running `docker compose up --remove-orphans` with only `docker-compose.yml` will remove the phpMyAdmin container.

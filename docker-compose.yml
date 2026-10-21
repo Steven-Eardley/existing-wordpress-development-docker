@@ -29,7 +29,7 @@ services:
        - db
      networks:
        wp:
-     image: wordpress:latest
+     image: wordpress:7.1-php8.4-apache
      volumes:
        - ./site/wp-content:/var/www/html/wp-content
        - ./init/prep.sh:/usr/local/bin/prep.sh

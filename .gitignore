@@ -4,3 +4,4 @@ database/
 
 site/
 !site/wp-content/.gitkeep
+backups/
